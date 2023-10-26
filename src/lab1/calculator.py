@@ -1,4 +1,4 @@
-from future import absolute_import
+from __future__ import absolute_import
 
 OPERATION_ADDITION = "1"
 OPERATION_SUBTRACTION = "2"
