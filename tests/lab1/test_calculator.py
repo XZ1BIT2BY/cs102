@@ -1,9 +1,20 @@
 import unittest
+from calculator.py import addition, subtraction, multiplication, division
 
-class CalculatorTestCase(unittest.TestCase):
-def addition(x, y):
-    return x + y
+class TestCalculatorFunctions(unittest.TestCase):
+    def test_addition(self):
+        self.assertEqual(addition(2, 3), 5)
 
-    # Тест для проверки работы, можно удалить
-    def test_one(self):
-        self.assertEquals(1, 1)
+    def test_subtraction(self):
+        self.assertEqual(subtraction(5, 2), 3)
+        
+    def test_multiplication(self):
+        self.assertEqual(multiplication(4, 3), 12)
+
+    def test_division(self):
+        self.assertEqual(division(10, 2), 5)
+        self.assertEqual(division(8, 4), 2)
+        
+    def test_division_by_zero(self):
+        with self.assertRaises(ZeroDivisionError):
+            division(5, 0)
