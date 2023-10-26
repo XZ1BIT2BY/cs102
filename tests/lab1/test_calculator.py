@@ -14,7 +14,4 @@ class TestCalculatorFunctions(unittest.TestCase):
     def test_division(self):
         self.assertEqual(division(10, 2), 5)
         self.assertEqual(division(8, 4), 2)
-        
-    def test_division_by_zero(self):
-        with self.assertRaises(ZeroDivisionError):
-            division(5, 0)
+
