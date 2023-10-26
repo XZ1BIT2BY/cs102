@@ -1,5 +1,5 @@
 import unittest
-from calculator.py import addition, subtraction, multiplication, division
+from ..calculator.py import addition, subtraction, multiplication, division
 
 class TestCalculatorFunctions(unittest.TestCase):
     def test_addition(self):
