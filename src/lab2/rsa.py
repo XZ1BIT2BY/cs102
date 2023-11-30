@@ -1,31 +1,89 @@
 import random
-import typing as tp
+from typing import Tuple, List
 
-
+# Функция для проверки простоты числа
 def is_prime(n: int) -> bool:
-    """
-    Tests to see if a number is prime.
-    >>> is_prime(2)
-    True
-    >>> is_prime(11)
-    True
-    >>> is_prime(8)
-    False
-    """
-    # PUT YOUR CODE HERE
-    pass
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
 
-
+# Функция для нахождения наибольшего общего делителя
 def gcd(a: int, b: int) -> int:
-    """
-    Euclid's algorithm for determining the greatest common divisor.
-    >>> gcd(12, 15)
-    3
-    >>> gcd(3, 7)
-    1
-    """
-    # PUT YOUR CODE HERE
-    pass
+    while b:
+        a, b = b, a % b
+    return a
+
+# Функция для нахождения мультипликативно обратного числа
+def multiplicative_inverse(e: int, phi: int) -> int:
+    d, x, y = extended_gcd(e, phi)
+    return x % phi
+
+# Расширенный алгоритм Евклида для нахождения коэффициентов Безу
+def extended_gcd(a: int, b: int) -> Tuple[int, int, int]:
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, x, y = extended_gcd(b % a, a)
+        return g, y - (b // a) * x, x
+
+# Функция для генерации открытого и закрытого ключей RSA
+def generate_keypair(p: int, q: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+    if not (is_prime(p) and is_prime(q)):
+        raise ValueError('Both numbers must be prime.')
+    elif p == q:
+        raise ValueError('p and q cannot be equal')
+
+    # n = pq
+    n = p * q
+
+    # phi = (p-1)(q-1)
+    phi = (p - 1) * (q - 1)
+
+    # Выбор целого числа e, взаимно простого с phi(n)
+    e = random.randrange(1, phi)
+
+    # Проверка взаимной простоты e и phi(n) с помощью алгоритма Евклида
+    while gcd(e, phi) != 1:
+        e = random.randrange(1, phi)
+
+    # Вычисление закрытого ключа с помощью расширенного алгоритма Евклида
+    d = multiplicative_inverse(e, phi)
+
+    # Возврат открытого и закрытого ключей
+    return ((e, n), (d, n))
+
+# Функция для шифрования сообщения
+def encrypt(pk: Tuple[int, int], plaintext: str) -> List[int]:
+    key, n = pk
+    # Шифрование: a^b mod m
+    cipher = [(ord(char) ** key) % n for char in plaintext]
+    return cipher
+
+# Функция для дешифрования сообщения
+def decrypt(pk: Tuple[int, int], ciphertext: List[int]) -> str:
+    key, n = pk
+    # Расшифровка: a^b mod m
+    plain = [chr((char ** key) % n) for char in ciphertext]
+    return "".join(plain)
+
+if __name__ == "__main__":
+    print("RSA Encrypter/ Decrypter")
+    p = int(input("Enter a prime number (17, 19, 23, etc): "))
+    q = int(input("Enter another prime number (Not one you entered above): "))
+    print("Generating your public/private keypairs now . . .")
+    public, private = generate_keypair(p, q)
+    print("Your public key is ", public, " and your private key is ", private)
+    message = input("Enter a message to encrypt with your private key: ")
+    encrypted_msg = encrypt(private, message)
+    print("Your encrypted message is: ")
+    print("".join(map(lambda x: str(x), encrypted_msg)))
+    print("Decrypting message with public key ", public, " . . .")
+    print("Your message is:")
+    print(decrypt(public, encrypted_msg))
+
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
