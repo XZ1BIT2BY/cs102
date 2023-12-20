@@ -11,10 +11,10 @@ class TestSurveyProcessor(unittest.TestCase):
 
     def test_process_survey(self):
         respondents = [
-            Respondent("Alice", 22),
-            Respondent("Bob", 35),
-            Respondent("Charlie", 45),
-            Respondent("David", 60),
+            Respondent("Алиса", 22),
+            Respondent("Борис", 35),
+            Respondent("Жаклин", 45),
+            Respondent("Денис", 60),
         ]
 
         survey_processor = SurveyProcessor(self.age_groups)
@@ -23,10 +23,10 @@ class TestSurveyProcessor(unittest.TestCase):
             with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
                 survey_processor.process_survey(respondents)
 
-        expected_output = "46-60: David (60)\n" \
-                          "36-45: Charlie (45)\n" \
-                          "26-35: Bob (35)\n" \
-                          "19-25: Alice (22)\n"
+        expected_output = "46-60: Денис (60)\n" \
+                          "36-45: Жаклин (45)\n" \
+                          "26-35: Борис (35)\n" \
+                          "19-25: Алиса (22)\n"
 
         self.assertEqual(mock_stdout.getvalue(), expected_output)
 
